@@ -3,11 +3,11 @@ extends VBoxContainer
 
 var _game_state: GameState # Stores the simulation source modified by occupational training actions.
 var _summary_label: Label # Stores the editor-created population summary label.
-var _button_container: VBoxContainer # Stores editor-backed layout receiving training buttons.
+var _button_container: Container # Stores editor-backed layout receiving training buttons.
 var _buttons: Dictionary[StringName, ActionButton] = {} # Stores one training button per trainable job.
 var _refresh_accumulator: float = 0.0 # Limits text and enabled-state refresh frequency.
 
-func setup(game_state: GameState, summary_label: Label, button_container: VBoxContainer) -> void: # Supplies state and editor-created child controls before building training actions.
+func setup(game_state: GameState, summary_label: Label, button_container: Container) -> void: # Supplies state and editor-created child controls before building training actions.
     _game_state = game_state
     _summary_label = summary_label
     _button_container = button_container
