@@ -19,9 +19,9 @@ extends Control
 
 var _active_panel: Control # Stores the currently selected drawer content or remains null while the drawer is closed.
 
-func setup(game_state: GameState) -> void: # Composes specialized game UI systems and configures one-at-a-time drawer navigation.
+func setup(game_state: GameState, begin_building_placement: Callable) -> void: # Composes specialized game UI systems and configures one-at-a-time drawer navigation.
     _resource_panel.setup(game_state)
-    _build_panel.setup(game_state, _build_buttons)
+    _build_panel.setup(game_state, _build_buttons, begin_building_placement, Callable(self, "_close_drawer"))
     _workforce_panel.setup(game_state, _workforce_summary, _training_buttons)
     _research_panel.setup(game_state, _research_buttons)
     _machine_panel.setup(game_state, _machine_label)
