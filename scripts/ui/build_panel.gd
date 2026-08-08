@@ -2,11 +2,11 @@ class_name BuildPanel
 extends VBoxContainer
 
 var _game_state: GameState # Stores the simulation source modified by construction actions.
-var _button_container: VBoxContainer # Stores editor-backed UI layout receiving generated action buttons.
+var _button_container: Container # Stores editor-backed UI layout receiving generated action buttons.
 var _buttons: Dictionary[StringName, ActionButton] = {} # Stores one reusable action button per building definition.
 var _refresh_accumulator: float = 0.0 # Limits button text and enabled-state updates.
 
-func setup(game_state: GameState, button_container: VBoxContainer) -> void: # Supplies game state and populates the editor-created button container.
+func setup(game_state: GameState, button_container: Container) -> void: # Supplies game state and populates the editor-created button container.
     _game_state = game_state
     _button_container = button_container
     _create_buttons()
