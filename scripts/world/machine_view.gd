@@ -19,7 +19,7 @@ func _process(_delta: float) -> void: # Redraws only when a stage changes or con
         _last_progress_bucket = progress_bucket
         queue_redraw()
 
-func _draw() -> void: # Draws completed machine sections plus a partially assembled active section.
+func _draw() -> void: # Draws the machine as a strict side elevation rooted on the same ground line as the settlement.
     if _game_state == null:
         return
     var completed_stages: int = mini(_game_state.machine.current_stage_index(), _game_state.machine.stage_count())
@@ -30,7 +30,7 @@ func _draw() -> void: # Draws completed machine sections plus a partially assemb
     else:
         _draw_active_pixels()
 
-func _draw_stage(stage_index: int, progress: float) -> void: # Routes each machine stage to its progressively revealed pixel-art assembly.
+func _draw_stage(stage_index: int, progress: float) -> void: # Routes each machine stage to its progressively revealed side-on pixel assembly.
     if stage_index == 0:
         _draw_foundation(progress)
     elif stage_index == 1:
@@ -40,37 +40,37 @@ func _draw_stage(stage_index: int, progress: float) -> void: # Routes each machi
     elif stage_index == 3:
         _draw_controls(progress)
 
-func _draw_foundation(progress: float) -> void: # Reveals the machine foundation from left to right as components arrive.
+func _draw_foundation(progress: float) -> void: # Reveals a foundation that sits directly on the common world ground line.
     var width: float = floor(112.0 * progress)
-    draw_rect(Rect2(466.0, 246.0, width, 10.0), PixelPalette.IRON, true)
-    draw_rect(Rect2(470.0, 256.0, minf(width, 104.0), 4.0), PixelPalette.INK, true)
+    draw_rect(Rect2(SideViewLayout.MACHINE_LEFT_X, SideViewLayout.GROUND_Y - 10.0, width, 8.0), PixelPalette.IRON, true)
+    draw_rect(Rect2(SideViewLayout.MACHINE_LEFT_X + 4.0, SideViewLayout.GROUND_Y - 2.0, minf(width, 104.0), 2.0), PixelPalette.INK, true)
 
-func _draw_frame(progress: float) -> void: # Reveals vertical and horizontal structural beams above the finished foundation.
+func _draw_frame(progress: float) -> void: # Reveals vertical and horizontal structural beams in one side elevation.
     var height: float = floor(92.0 * progress)
-    draw_rect(Rect2(478.0, 246.0 - height, 8.0, height), PixelPalette.IRON_LIGHT, true)
-    draw_rect(Rect2(558.0, 246.0 - height, 8.0, height), PixelPalette.IRON_LIGHT, true)
+    draw_rect(Rect2(478.0, SideViewLayout.GROUND_Y - 10.0 - height, 8.0, height), PixelPalette.IRON_LIGHT, true)
+    draw_rect(Rect2(558.0, SideViewLayout.GROUND_Y - 10.0 - height, 8.0, height), PixelPalette.IRON_LIGHT, true)
     if progress > 0.35:
         var top_width: float = floor(80.0 * clampf((progress - 0.35) / 0.65, 0.0, 1.0))
-        draw_rect(Rect2(486.0, 154.0, top_width, 7.0), PixelPalette.IRON, true)
+        draw_rect(Rect2(486.0, SideViewLayout.GROUND_Y - 102.0, top_width, 7.0), PixelPalette.IRON, true)
 
-func _draw_drive(progress: float) -> void: # Reveals a large central drive assembly using blocky gears and shafts.
+func _draw_drive(progress: float) -> void: # Reveals a large profile-view drive assembly using blocky gears and shafts.
     var radius: float = floor(24.0 * progress)
     if radius <= 0.0:
         return
-    draw_circle(Vector2(522.0, 209.0), radius, PixelPalette.INK)
-    draw_circle(Vector2(522.0, 209.0), maxf(radius - 5.0, 1.0), PixelPalette.NICKEL)
-    draw_rect(Rect2(519.0, 170.0, 6.0, 78.0 * progress), PixelPalette.IRON_LIGHT, true)
+    draw_circle(Vector2(522.0, SideViewLayout.GROUND_Y - 41.0), radius, PixelPalette.INK)
+    draw_circle(Vector2(522.0, SideViewLayout.GROUND_Y - 41.0), maxf(radius - 5.0, 1.0), PixelPalette.NICKEL)
+    draw_rect(Rect2(519.0, SideViewLayout.GROUND_Y - 80.0, 6.0, 78.0 * progress), PixelPalette.IRON_LIGHT, true)
 
-func _draw_controls(progress: float) -> void: # Reveals electronic panels and sparse indicator pixels across the upper machine.
+func _draw_controls(progress: float) -> void: # Reveals electronic panels across the upper side of the machine.
     var panel_height: float = floor(46.0 * progress)
-    draw_rect(Rect2(492.0, 168.0, 60.0, panel_height), PixelPalette.INK, true)
+    draw_rect(Rect2(492.0, SideViewLayout.GROUND_Y - 82.0, 60.0, panel_height), PixelPalette.INK, true)
     if progress > 0.2:
-        draw_rect(Rect2(499.0, 178.0, 3.0, 3.0), PixelPalette.ELECTRIC, true)
+        draw_rect(Rect2(499.0, SideViewLayout.GROUND_Y - 72.0, 3.0, 3.0), PixelPalette.ELECTRIC, true)
     if progress > 0.45:
-        draw_rect(Rect2(510.0, 184.0, 2.0, 2.0), PixelPalette.COBALT, true)
+        draw_rect(Rect2(510.0, SideViewLayout.GROUND_Y - 66.0, 2.0, 2.0), PixelPalette.COBALT, true)
     if progress > 0.7:
-        draw_rect(Rect2(541.0, 176.0, 4.0, 2.0), PixelPalette.ELECTRIC, true)
+        draw_rect(Rect2(541.0, SideViewLayout.GROUND_Y - 74.0, 4.0, 2.0), PixelPalette.ELECTRIC, true)
 
-func _draw_active_pixels() -> void: # Adds restrained indicator pixels once the current prototype machine is fully assembled.
-    draw_rect(Rect2(500.0, 174.0, 3.0, 3.0), PixelPalette.ELECTRIC, true)
-    draw_rect(Rect2(541.0, 181.0, 2.0, 2.0), PixelPalette.COBALT, true)
+func _draw_active_pixels() -> void: # Adds restrained profile-view indicator pixels once the prototype machine is fully assembled.
+    draw_rect(Rect2(500.0, SideViewLayout.GROUND_Y - 76.0, 3.0, 3.0), PixelPalette.ELECTRIC, true)
+    draw_rect(Rect2(541.0, SideViewLayout.GROUND_Y - 69.0, 2.0, 2.0), PixelPalette.COBALT, true)
