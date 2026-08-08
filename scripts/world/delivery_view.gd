@@ -7,7 +7,7 @@ var _deliveries: Array[DeliveryVisual] = [] # Stores only currently visible comp
 func setup(game_state: GameState) -> void: # Supplies the machine simulation after scene construction.
     _game_state = game_state
 
-func _process(delta: float) -> void: # Consumes new delivery events and advances active projectile arcs.
+func _process(delta: float) -> void: # Consumes new delivery events and advances active side-on projectile arcs.
     if _game_state == null:
         return
     var events: Array[MachineDeliveryEvent] = _game_state.machine.consume_delivery_events()
@@ -23,14 +23,15 @@ func _process(delta: float) -> void: # Consumes new delivery events and advances
     if not _deliveries.is_empty() or not events.is_empty():
         queue_redraw()
 
-func _spawn_delivery(event: MachineDeliveryEvent) -> void: # Creates a deterministic throw arc without adding scene nodes or physics bodies.
-    var lane: float = float(event.sequence % 8) * 2.0
-    var start: Vector2 = Vector2(362.0, 235.0 + lane)
-    var end: Vector2 = Vector2(486.0 + float(event.sequence % 17), 218.0 + float(event.sequence % 29))
+func _spawn_delivery(event: MachineDeliveryEvent) -> void: # Creates a deterministic profile-view throw from the settlement toward the machine.
+    var start_height: float = float(event.sequence % 3)
+    var target_height: float = float(event.sequence % 24)
+    var start: Vector2 = Vector2(410.0, SideViewLayout.GROUND_Y - 15.0 - start_height)
+    var end: Vector2 = Vector2(SideViewLayout.MACHINE_LEFT_X + 18.0 + float(event.sequence % 48), SideViewLayout.GROUND_Y - 28.0 - target_height)
     var speed: float = 0.9 + float(event.sequence % 5) * 0.07
     _deliveries.append(DeliveryVisual.new(event.resource_id, start, end, speed))
 
-func _draw() -> void: # Draws every active thrown component as a tiny colored pixel cluster on a parabolic arc.
+func _draw() -> void: # Draws every active component as a tiny pixel cluster following a genuine vertical throw arc.
     for delivery: DeliveryVisual in _deliveries:
         var t: float = clampf(delivery.progress, 0.0, 1.0)
         var position: Vector2 = delivery.start.lerp(delivery.end, t)
