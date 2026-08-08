@@ -7,18 +7,18 @@ var _refresh_accumulator: float = 0.0 # Limits header text rebuilding frequency 
 
 func setup(game_state: GameState) -> void: # Supplies game state and maps the editor-created resource cells once.
     _game_state = game_state
-    _labels[ResourceIds.WOOD] = $Wood
-    _labels[ResourceIds.IRON_ORE] = $IronOre
-    _labels[ResourceIds.IRON] = $Iron
-    _labels[ResourceIds.IRON_PLATE] = $IronPlate
-    _labels[ResourceIds.IRON_BEAM] = $IronBeam
-    _labels[ResourceIds.NICKEL_ORE] = $NickelOre
-    _labels[ResourceIds.NICKEL] = $Nickel
-    _labels[ResourceIds.COBALT_ORE] = $CobaltOre
-    _labels[ResourceIds.COBALT] = $Cobalt
-    _labels[ResourceIds.ALLOY_COMPONENT] = $AlloyComponent
-    _labels[ResourceIds.KNOWLEDGE] = $Knowledge
-    _labels[ResourceIds.ELECTRONICS] = $Electronics
+    _labels[ResourceIds.WOOD] = $Wood as Label
+    _labels[ResourceIds.IRON_ORE] = $IronOre as Label
+    _labels[ResourceIds.IRON] = $Iron as Label
+    _labels[ResourceIds.IRON_PLATE] = $IronPlate as Label
+    _labels[ResourceIds.IRON_BEAM] = $IronBeam as Label
+    _labels[ResourceIds.NICKEL_ORE] = $NickelOre as Label
+    _labels[ResourceIds.NICKEL] = $Nickel as Label
+    _labels[ResourceIds.COBALT_ORE] = $CobaltOre as Label
+    _labels[ResourceIds.COBALT] = $Cobalt as Label
+    _labels[ResourceIds.ALLOY_COMPONENT] = $AlloyComponent as Label
+    _labels[ResourceIds.KNOWLEDGE] = $Knowledge as Label
+    _labels[ResourceIds.ELECTRONICS] = $Electronics as Label
     _refresh()
 
 func _process(delta: float) -> void: # Refreshes all persistent header counters at a low cadence.
