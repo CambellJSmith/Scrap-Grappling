@@ -37,16 +37,17 @@ static func _workplace_target(game_state: GameState, job_id: StringName, index: 
     return clampf(center_x + local_offset, SideViewLayout.SETTLEMENT_MIN_X, SideViewLayout.SETTLEMENT_MAX_X)
 
 static func _building_ids_for_job(job_id: StringName) -> Array[StringName]: # Maps visual occupations to the building types where those scraplings actually work.
+    var ids: Array[StringName] = []
     if job_id == JobIds.MINER:
-        return [BuildingIds.IRON_MINE, BuildingIds.NICKEL_MINE, BuildingIds.COBALT_MINE]
-    if job_id == JobIds.LUMBERJACK:
-        return [BuildingIds.LUMBER_CAMP]
-    if job_id == JobIds.REFINER:
-        return [BuildingIds.IRON_EXTRACTOR, BuildingIds.NICKEL_EXTRACTOR, BuildingIds.COBALT_EXTRACTOR]
-    if job_id == JobIds.SMITH:
-        return [BuildingIds.FORGE, BuildingIds.BEAM_FORGE, BuildingIds.ALLOY_FORGE]
-    if job_id == JobIds.SCHOLAR:
-        return [BuildingIds.UNIVERSITY]
-    if job_id == JobIds.ENGINEER:
-        return [BuildingIds.ELECTRONICS_LAB, BuildingIds.UNIVERSITY]
-    return []
+        ids = [BuildingIds.IRON_MINE, BuildingIds.NICKEL_MINE, BuildingIds.COBALT_MINE]
+    elif job_id == JobIds.LUMBERJACK:
+        ids = [BuildingIds.LUMBER_CAMP]
+    elif job_id == JobIds.REFINER:
+        ids = [BuildingIds.IRON_EXTRACTOR, BuildingIds.NICKEL_EXTRACTOR, BuildingIds.COBALT_EXTRACTOR]
+    elif job_id == JobIds.SMITH:
+        ids = [BuildingIds.FORGE, BuildingIds.BEAM_FORGE, BuildingIds.ALLOY_FORGE]
+    elif job_id == JobIds.SCHOLAR:
+        ids = [BuildingIds.UNIVERSITY]
+    elif job_id == JobIds.ENGINEER:
+        ids = [BuildingIds.ELECTRONICS_LAB, BuildingIds.UNIVERSITY]
+    return ids
