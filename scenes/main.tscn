@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/simulation/game_state.gd" id="2_state"]
@@ -15,6 +15,9 @@
 [ext_resource type="Script" path="res://scripts/ui/machine_panel.gd" id="13_machine_panel"]
 [ext_resource type="Script" path="res://scripts/ui/action_button.gd" id="14_action"]
 [ext_resource type="Script" path="res://scripts/world/world_camera.gd" id="15_camera"]
+[ext_resource type="Script" path="res://scripts/world/building_placement_controller.gd" id="16_placement"]
+[ext_resource type="Script" path="res://scripts/world/construction_site_view.gd" id="17_sites"]
+[ext_resource type="Script" path="res://scripts/world/construction_delivery_view.gd" id="18_construction_delivery"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_main")
@@ -30,6 +33,9 @@ script = ExtResource("3_terrain")
 [node name="BuildingView" type="Node2D" parent="World"]
 script = ExtResource("4_building")
 
+[node name="ConstructionSiteView" type="Node2D" parent="World"]
+script = ExtResource("17_sites")
+
 [node name="ScraplingSwarmView" type="Node2D" parent="World"]
 script = ExtResource("5_scraplings")
 
@@ -38,6 +44,12 @@ script = ExtResource("6_machine")
 
 [node name="DeliveryView" type="Node2D" parent="World"]
 script = ExtResource("7_delivery")
+
+[node name="ConstructionDeliveryView" type="Node2D" parent="World"]
+script = ExtResource("18_construction_delivery")
+
+[node name="BuildingPlacementController" type="Node2D" parent="World"]
+script = ExtResource("16_placement")
 
 [node name="WorldCamera" type="Camera2D" parent="World"]
 script = ExtResource("15_camera")
@@ -194,7 +206,7 @@ script = ExtResource("10_build")
 [node name="Title" type="Label" parent="UILayer/Hud/DrawerPanel/Margin/Content/BuildPanel"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
-text = "build infrastructure"
+text = "place infrastructure"
 
 [node name="Scroll" type="ScrollContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content/BuildPanel"]
 layout_mode = 2
@@ -343,5 +355,5 @@ size_flags_horizontal = 3
 [node name="Hint" type="Label" parent="UILayer/Hud/BottomBar/Margin/Nav"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
-text = "drag empty world to move"
+text = "build: choose, click ground | right click cancel | drag world"
 vertical_alignment = 1
