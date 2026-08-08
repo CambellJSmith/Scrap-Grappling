@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/simulation/game_state.gd" id="2_state"]
@@ -13,6 +13,8 @@
 [ext_resource type="Script" path="res://scripts/ui/workforce_panel.gd" id="11_workforce"]
 [ext_resource type="Script" path="res://scripts/ui/research_panel.gd" id="12_research"]
 [ext_resource type="Script" path="res://scripts/ui/machine_panel.gd" id="13_machine_panel"]
+[ext_resource type="Script" path="res://scripts/ui/action_button.gd" id="14_action"]
+[ext_resource type="Script" path="res://scripts/world/world_camera.gd" id="15_camera"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_main")
@@ -37,6 +39,9 @@ script = ExtResource("6_machine")
 [node name="DeliveryView" type="Node2D" parent="World"]
 script = ExtResource("7_delivery")
 
+[node name="WorldCamera" type="Camera2D" parent="World"]
+script = ExtResource("15_camera")
+
 [node name="UILayer" type="CanvasLayer" parent="."]
 
 [node name="Hud" type="Control" parent="UILayer"]
@@ -49,165 +54,294 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("8_hud")
 
-[node name="TopPanel" type="PanelContainer" parent="UILayer/Hud"]
+[node name="HeaderBar" type="PanelContainer" parent="UILayer/Hud"]
 layout_mode = 1
-anchors_preset = 0
-anchor_left = 0.25
-anchor_right = 0.75
-offset_top = 4.0
-offset_bottom = 45.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 38.0
+grow_horizontal = 2
 
-[node name="Margin" type="MarginContainer" parent="UILayer/Hud/TopPanel"]
+[node name="Margin" type="MarginContainer" parent="UILayer/Hud/HeaderBar"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 3
+theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 3
+theme_override_constants/margin_bottom = 2
 
-[node name="ResourcePanel" type="VBoxContainer" parent="UILayer/Hud/TopPanel/Margin"]
+[node name="ResourcePanel" type="GridContainer" parent="UILayer/Hud/HeaderBar/Margin"]
 layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 0
+columns = 6
 script = ExtResource("9_resources")
 
-[node name="Resources" type="Label" parent="UILayer/Hud/TopPanel/Margin/ResourcePanel"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 9
-text = "resources"
-horizontal_alignment = 1
-
-[node name="LeftPanel" type="PanelContainer" parent="UILayer/Hud"]
-layout_mode = 1
-anchors_preset = 0
-offset_left = 4.0
-offset_top = 48.0
-offset_right = 176.0
-offset_bottom = 316.0
-
-[node name="Margin" type="MarginContainer" parent="UILayer/Hud/LeftPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="BuildPanel" type="VBoxContainer" parent="UILayer/Hud/LeftPanel/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 3
-script = ExtResource("10_build")
-
-[node name="Title" type="Label" parent="UILayer/Hud/LeftPanel/Margin/BuildPanel"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "build"
-horizontal_alignment = 1
-
-[node name="Scroll" type="ScrollContainer" parent="UILayer/Hud/LeftPanel/Margin/BuildPanel"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="Buttons" type="VBoxContainer" parent="UILayer/Hud/LeftPanel/Margin/BuildPanel/Scroll"]
+[node name="Wood" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 2
-
-[node name="RightPanel" type="PanelContainer" parent="UILayer/Hud"]
-layout_mode = 1
-anchors_preset = 0
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -176.0
-offset_top = 48.0
-offset_right = -4.0
-offset_bottom = 316.0
-
-[node name="Margin" type="MarginContainer" parent="UILayer/Hud/RightPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="RightColumn" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 5
-
-[node name="WorkforcePanel" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 2
-script = ExtResource("11_workforce")
-
-[node name="Title" type="Label" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "scraplings"
-horizontal_alignment = 1
-
-[node name="Summary" type="Label" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel"]
-layout_mode = 2
 theme_override_font_sizes/font_size = 8
-text = "population"
-
-[node name="TrainingLabel" type="Label" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 9
-text = "training"
-
-[node name="TrainingScroll" type="ScrollContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel"]
-custom_minimum_size = Vector2(0, 66)
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="Buttons" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel/TrainingScroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 2
-
-[node name="ResearchPanel" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 2
-script = ExtResource("12_research")
-
-[node name="Title" type="Label" parent="UILayer/Hud/RightPanel/Margin/RightColumn/ResearchPanel"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "research"
+text = "wood 0"
 horizontal_alignment = 1
 
-[node name="ResearchScroll" type="ScrollContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn/ResearchPanel"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="Buttons" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn/ResearchPanel/ResearchScroll"]
+[node name="IronOre" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 2
+theme_override_font_sizes/font_size = 8
+text = "iron ore 0"
+horizontal_alignment = 1
 
-[node name="BottomPanel" type="PanelContainer" parent="UILayer/Hud"]
+[node name="Iron" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "iron 0"
+horizontal_alignment = 1
+
+[node name="IronPlate" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "plates 0"
+horizontal_alignment = 1
+
+[node name="IronBeam" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "beams 0"
+horizontal_alignment = 1
+
+[node name="NickelOre" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "nickel ore 0"
+horizontal_alignment = 1
+
+[node name="Nickel" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "nickel 0"
+horizontal_alignment = 1
+
+[node name="CobaltOre" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "cobalt ore 0"
+horizontal_alignment = 1
+
+[node name="Cobalt" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "cobalt 0"
+horizontal_alignment = 1
+
+[node name="AlloyComponent" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "alloy 0"
+horizontal_alignment = 1
+
+[node name="Knowledge" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "knowledge 0"
+horizontal_alignment = 1
+
+[node name="Electronics" type="Label" parent="UILayer/Hud/HeaderBar/Margin/ResourcePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "electronics 0"
+horizontal_alignment = 1
+
+[node name="DrawerPanel" type="PanelContainer" parent="UILayer/Hud"]
+visible = false
 layout_mode = 1
-anchor_left = 0.25
+anchor_left = 0.08
 anchor_top = 1.0
-anchor_right = 0.75
+anchor_right = 0.92
 anchor_bottom = 1.0
-offset_top = -48.0
-offset_bottom = -4.0
+offset_top = -148.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 0
 
-[node name="Margin" type="MarginContainer" parent="UILayer/Hud/BottomPanel"]
+[node name="Margin" type="MarginContainer" parent="UILayer/Hud/DrawerPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 4
 
-[node name="MachinePanel" type="VBoxContainer" parent="UILayer/Hud/BottomPanel/Margin"]
+[node name="Content" type="Control" parent="UILayer/Hud/DrawerPanel/Margin"]
 layout_mode = 2
+
+[node name="BuildPanel" type="VBoxContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+script = ExtResource("10_build")
+
+[node name="Title" type="Label" parent="UILayer/Hud/DrawerPanel/Margin/Content/BuildPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "build infrastructure"
+
+[node name="Scroll" type="ScrollContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content/BuildPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Buttons" type="GridContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content/BuildPanel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 2
+columns = 3
+
+[node name="WorkforcePanel" type="VBoxContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("11_workforce")
+
+[node name="Content" type="HBoxContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content/WorkforcePanel"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="Summary" type="Label" parent="UILayer/Hud/DrawerPanel/Margin/Content/WorkforcePanel/Content"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "scraplings"
+
+[node name="Training" type="VBoxContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content/WorkforcePanel/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="UILayer/Hud/DrawerPanel/Margin/Content/WorkforcePanel/Content/Training"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "training"
+
+[node name="Scroll" type="ScrollContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content/WorkforcePanel/Content/Training"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Buttons" type="GridContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content/WorkforcePanel/Content/Training/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="ResearchPanel" type="VBoxContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+script = ExtResource("12_research")
+
+[node name="Title" type="Label" parent="UILayer/Hud/DrawerPanel/Margin/Content/ResearchPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "research"
+
+[node name="Scroll" type="ScrollContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content/ResearchPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Buttons" type="GridContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content/ResearchPanel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 2
+columns = 3
+
+[node name="MachinePanel" type="VBoxContainer" parent="UILayer/Hud/DrawerPanel/Margin/Content"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
 script = ExtResource("13_machine_panel")
 
-[node name="Status" type="Label" parent="UILayer/Hud/BottomPanel/Margin/MachinePanel"]
+[node name="Status" type="Label" parent="UILayer/Hud/DrawerPanel/Margin/Content/MachinePanel"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
 text = "machine"
 horizontal_alignment = 1
+
+[node name="BottomBar" type="PanelContainer" parent="UILayer/Hud"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -34.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Hud/BottomBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 3
+
+[node name="Nav" type="HBoxContainer" parent="UILayer/Hud/BottomBar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Build" type="Button" parent="UILayer/Hud/BottomBar/Margin/Nav"]
+layout_mode = 2
+text = "build"
+script = ExtResource("14_action")
+
+[node name="Workforce" type="Button" parent="UILayer/Hud/BottomBar/Margin/Nav"]
+layout_mode = 2
+text = "scraplings"
+script = ExtResource("14_action")
+
+[node name="Research" type="Button" parent="UILayer/Hud/BottomBar/Margin/Nav"]
+layout_mode = 2
+text = "research"
+script = ExtResource("14_action")
+
+[node name="Machine" type="Button" parent="UILayer/Hud/BottomBar/Margin/Nav"]
+layout_mode = 2
+text = "machine"
+script = ExtResource("14_action")
+
+[node name="Spacer" type="Control" parent="UILayer/Hud/BottomBar/Margin/Nav"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Hint" type="Label" parent="UILayer/Hud/BottomBar/Margin/Nav"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "drag empty world to move"
+vertical_alignment = 1
