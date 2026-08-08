@@ -3,21 +3,21 @@ extends RefCounted
 
 static func create_buildings() -> Dictionary[StringName, BuildingDefinition]: # Builds the authoritative building catalog.
     var definitions: Dictionary[StringName, BuildingDefinition] = {}
-    definitions[BuildingIds.HOUSE] = BuildingDefinition.new(BuildingIds.HOUSE, "house", &"settlement", {ResourceIds.WOOD: 25, ResourceIds.IRON: 4}, &"", 0, 6)
-    definitions[BuildingIds.ROAD] = BuildingDefinition.new(BuildingIds.ROAD, "road", &"settlement", {ResourceIds.WOOD: 12, ResourceIds.IRON: 2}, &"", 0, 0)
-    definitions[BuildingIds.TRAINING_YARD] = BuildingDefinition.new(BuildingIds.TRAINING_YARD, "training yard", &"settlement", {ResourceIds.WOOD: 30, ResourceIds.IRON: 8}, &"", 0, 0)
-    definitions[BuildingIds.IRON_MINE] = BuildingDefinition.new(BuildingIds.IRON_MINE, "iron mine", &"industry", {ResourceIds.WOOD: 18, ResourceIds.IRON: 2}, &"", 4, 0)
-    definitions[BuildingIds.LUMBER_CAMP] = BuildingDefinition.new(BuildingIds.LUMBER_CAMP, "lumber camp", &"industry", {ResourceIds.WOOD: 10, ResourceIds.IRON: 2}, &"", 4, 0)
-    definitions[BuildingIds.IRON_EXTRACTOR] = BuildingDefinition.new(BuildingIds.IRON_EXTRACTOR, "iron extractor", &"industry", {ResourceIds.WOOD: 18, ResourceIds.IRON: 8}, &"", 3, 0)
-    definitions[BuildingIds.FORGE] = BuildingDefinition.new(BuildingIds.FORGE, "plate forge", &"industry", {ResourceIds.WOOD: 22, ResourceIds.IRON: 12}, &"", 3, 0)
-    definitions[BuildingIds.BEAM_FORGE] = BuildingDefinition.new(BuildingIds.BEAM_FORGE, "beam forge", &"industry", {ResourceIds.WOOD: 18, ResourceIds.IRON: 10}, &"", 3, 0)
-    definitions[BuildingIds.UNIVERSITY] = BuildingDefinition.new(BuildingIds.UNIVERSITY, "university", &"settlement", {ResourceIds.WOOD: 70, ResourceIds.IRON_PLATE: 35}, &"", 4, 0)
-    definitions[BuildingIds.NICKEL_MINE] = BuildingDefinition.new(BuildingIds.NICKEL_MINE, "nickel mine", &"industry", {ResourceIds.WOOD: 35, ResourceIds.IRON_PLATE: 14}, ResearchIds.NICKEL_PROCESSING, 4, 0)
-    definitions[BuildingIds.NICKEL_EXTRACTOR] = BuildingDefinition.new(BuildingIds.NICKEL_EXTRACTOR, "nickel extractor", &"industry", {ResourceIds.IRON_PLATE: 20, ResourceIds.IRON: 10}, ResearchIds.NICKEL_PROCESSING, 3, 0)
-    definitions[BuildingIds.COBALT_MINE] = BuildingDefinition.new(BuildingIds.COBALT_MINE, "cobalt mine", &"industry", {ResourceIds.WOOD: 40, ResourceIds.ALLOY_COMPONENT: 8}, ResearchIds.COBALT_PROCESSING, 4, 0)
-    definitions[BuildingIds.COBALT_EXTRACTOR] = BuildingDefinition.new(BuildingIds.COBALT_EXTRACTOR, "cobalt extractor", &"industry", {ResourceIds.IRON_PLATE: 30, ResourceIds.NICKEL: 10}, ResearchIds.COBALT_PROCESSING, 3, 0)
-    definitions[BuildingIds.ALLOY_FORGE] = BuildingDefinition.new(BuildingIds.ALLOY_FORGE, "alloy forge", &"industry", {ResourceIds.IRON_PLATE: 35, ResourceIds.NICKEL: 15}, ResearchIds.METALLURGY, 3, 0)
-    definitions[BuildingIds.ELECTRONICS_LAB] = BuildingDefinition.new(BuildingIds.ELECTRONICS_LAB, "electronics lab", &"industry", {ResourceIds.ALLOY_COMPONENT: 20, ResourceIds.COBALT: 12}, ResearchIds.ELECTRONICS, 3, 0)
+    definitions[BuildingIds.HOUSE] = BuildingDefinition.new(BuildingIds.HOUSE, "house", &"settlement", {ResourceIds.WOOD: 25, ResourceIds.IRON: 4}, &"", 0, 6, 16)
+    definitions[BuildingIds.ROAD] = BuildingDefinition.new(BuildingIds.ROAD, "road", &"settlement", {ResourceIds.WOOD: 12, ResourceIds.IRON: 2}, &"", 0, 0, 40)
+    definitions[BuildingIds.TRAINING_YARD] = BuildingDefinition.new(BuildingIds.TRAINING_YARD, "training yard", &"settlement", {ResourceIds.WOOD: 30, ResourceIds.IRON: 8}, &"", 0, 0, 18)
+    definitions[BuildingIds.IRON_MINE] = BuildingDefinition.new(BuildingIds.IRON_MINE, "iron mine", &"industry", {ResourceIds.WOOD: 18, ResourceIds.IRON: 2}, &"", 4, 0, 18)
+    definitions[BuildingIds.LUMBER_CAMP] = BuildingDefinition.new(BuildingIds.LUMBER_CAMP, "lumber camp", &"industry", {ResourceIds.WOOD: 10, ResourceIds.IRON: 2}, &"", 4, 0, 18)
+    definitions[BuildingIds.IRON_EXTRACTOR] = BuildingDefinition.new(BuildingIds.IRON_EXTRACTOR, "iron extractor", &"industry", {ResourceIds.WOOD: 18, ResourceIds.IRON: 8}, &"", 3, 0, 18)
+    definitions[BuildingIds.FORGE] = BuildingDefinition.new(BuildingIds.FORGE, "plate forge", &"industry", {ResourceIds.WOOD: 22, ResourceIds.IRON: 12}, &"", 3, 0, 18)
+    definitions[BuildingIds.BEAM_FORGE] = BuildingDefinition.new(BuildingIds.BEAM_FORGE, "beam forge", &"industry", {ResourceIds.WOOD: 18, ResourceIds.IRON: 10}, &"", 3, 0, 18)
+    definitions[BuildingIds.UNIVERSITY] = BuildingDefinition.new(BuildingIds.UNIVERSITY, "university", &"settlement", {ResourceIds.WOOD: 70, ResourceIds.IRON_PLATE: 35}, &"", 4, 0, 20)
+    definitions[BuildingIds.NICKEL_MINE] = BuildingDefinition.new(BuildingIds.NICKEL_MINE, "nickel mine", &"industry", {ResourceIds.WOOD: 35, ResourceIds.IRON_PLATE: 14}, ResearchIds.NICKEL_PROCESSING, 4, 0, 18)
+    definitions[BuildingIds.NICKEL_EXTRACTOR] = BuildingDefinition.new(BuildingIds.NICKEL_EXTRACTOR, "nickel extractor", &"industry", {ResourceIds.IRON_PLATE: 20, ResourceIds.IRON: 10}, ResearchIds.NICKEL_PROCESSING, 3, 0, 18)
+    definitions[BuildingIds.COBALT_MINE] = BuildingDefinition.new(BuildingIds.COBALT_MINE, "cobalt mine", &"industry", {ResourceIds.WOOD: 40, ResourceIds.ALLOY_COMPONENT: 8}, ResearchIds.COBALT_PROCESSING, 4, 0, 18)
+    definitions[BuildingIds.COBALT_EXTRACTOR] = BuildingDefinition.new(BuildingIds.COBALT_EXTRACTOR, "cobalt extractor", &"industry", {ResourceIds.IRON_PLATE: 30, ResourceIds.NICKEL: 10}, ResearchIds.COBALT_PROCESSING, 3, 0, 18)
+    definitions[BuildingIds.ALLOY_FORGE] = BuildingDefinition.new(BuildingIds.ALLOY_FORGE, "alloy forge", &"industry", {ResourceIds.IRON_PLATE: 35, ResourceIds.NICKEL: 15}, ResearchIds.METALLURGY, 3, 0, 18)
+    definitions[BuildingIds.ELECTRONICS_LAB] = BuildingDefinition.new(BuildingIds.ELECTRONICS_LAB, "electronics lab", &"industry", {ResourceIds.ALLOY_COMPONENT: 20, ResourceIds.COBALT: 12}, ResearchIds.ELECTRONICS, 3, 0, 20)
     return definitions
 
 static func create_recipes() -> Array[RecipeDefinition]: # Builds production recipes in deterministic processing order.
