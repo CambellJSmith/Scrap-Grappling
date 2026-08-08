@@ -8,7 +8,8 @@ var training_definitions: Dictionary[StringName, TrainingDefinition] = GameCatal
 var research_definitions: Dictionary[StringName, ResearchDefinition] = GameCatalog.create_research() # Exposes research metadata to UI systems.
 var inventory: Inventory = Inventory.new() # Owns all settlement resource quantities.
 var workforce: Workforce = Workforce.new(6) # Owns all available and specialized scraplings.
-var settlement: Settlement = Settlement.new() # Owns constructed building counts.
+var settlement: Settlement = Settlement.new() # Owns completed positioned buildings and their active benefits.
+var construction: ConstructionSystem = ConstructionSystem.new(buildings) # Owns placed blueprints, incremental material delivery, and building completion.
 var research: ResearchSystem = ResearchSystem.new() # Owns completed research unlocks.
 var training: TrainingSystem = TrainingSystem.new() # Owns active occupational training.
 var recruitment: RecruitmentSystem = RecruitmentSystem.new() # Owns settlement population growth timing.
@@ -17,7 +18,7 @@ var machine: MachineSystem = MachineSystem.new(GameCatalog.create_machine_stages
 var machine_delivery_enabled: bool = true # Stores whether scraplings are currently allowed to spend stock on the central machine.
 var _simulation_accumulator: float = 0.0 # Accumulates frame time for fixed-step simulation updates.
 
-func _ready() -> void: # Seeds a small salvaged stockpile that lets the first industries be constructed without a deadlock.
+func _ready() -> void: # Seeds a small salvaged stockpile that lets the first industries be placed without a deadlock.
     inventory.add(ResourceIds.WOOD, 90)
     inventory.add(ResourceIds.IRON, 35)
     inventory.add(ResourceIds.IRON_ORE, 18)
@@ -28,28 +29,31 @@ func _process(delta: float) -> void: # Advances game systems at a fixed cadence 
         _simulation_accumulator -= SIMULATION_STEP_SECONDS
         _tick_simulation(SIMULATION_STEP_SECONDS)
 
-func _tick_simulation(delta: float) -> void: # Runs systems in a stable order so resource ownership remains deterministic.
+func _tick_simulation(delta: float) -> void: # Runs systems in a stable order so building projects receive materials before optional machine construction.
     training.tick(delta, workforce)
     recruitment.tick(delta, settlement, buildings, workforce, training)
     production.tick(delta, settlement, workforce, inventory)
+    construction.tick(delta, inventory, workforce, settlement)
     if machine_delivery_enabled:
         machine.tick(delta, inventory, workforce, settlement)
 
-func try_build(building_id: StringName) -> bool: # Validates unlock state and attempts construction of one building.
+func can_place_building_type(building_id: StringName) -> bool: # Checks whether one building type is unlocked for blueprint placement.
     if not buildings.has(building_id):
         return false
     var definition: BuildingDefinition = buildings[building_id]
-    if not research.is_completed(definition.required_research):
-        return false
-    return settlement.construct(definition, inventory)
+    return research.is_completed(definition.required_research)
 
-func can_build(building_id: StringName) -> bool: # Checks whether a building is unlocked and affordable without changing game state.
-    if not buildings.has(building_id):
+func can_place_building_at(building_id: StringName, x: float) -> bool: # Checks unlock state and footprint overlap for one prospective blueprint position.
+    if not can_place_building_type(building_id):
         return false
     var definition: BuildingDefinition = buildings[building_id]
-    if not research.is_completed(definition.required_research):
+    return construction.can_place(definition, x, settlement)
+
+func try_place_building(building_id: StringName, x: float) -> bool: # Creates an unpaid construction site that scraplings must supply before any building benefit activates.
+    if not can_place_building_type(building_id):
         return false
-    return inventory.has_cost(definition.cost)
+    var definition: BuildingDefinition = buildings[building_id]
+    return construction.place_site(definition, x, settlement)
 
 func try_train(job_id: StringName) -> bool: # Attempts to begin one occupational training course.
     if not training_definitions.has(job_id):
@@ -63,7 +67,7 @@ func can_train(job_id: StringName) -> bool: # Checks whether one occupational tr
     var definition: TrainingDefinition = training_definitions[job_id]
     return training.can_start(definition, settlement, research, workforce, inventory)
 
-func try_research(research_id: StringName) -> bool: # Attempts to complete one research topic through the university.
+func try_research(research_id: StringName) -> bool: # Attempts to complete one research topic through a completed university.
     if settlement.get_count(BuildingIds.UNIVERSITY) <= 0:
         return false
     if not research_definitions.has(research_id):
@@ -83,7 +87,7 @@ func can_research(research_id: StringName) -> bool: # Checks university, prerequ
         return false
     return inventory.has_cost(definition.cost)
 
-func population_capacity() -> int: # Returns current housing capacity for UI and world presentation.
+func population_capacity() -> int: # Returns current housing capacity from completed structures only.
     return settlement.population_capacity(buildings)
 
 func toggle_machine_delivery() -> void: # Lets the player reserve materials for settlement growth by pausing or resuming component throws.
