@@ -1,0 +1,213 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/simulation/game_state.gd" id="2_state"]
+[ext_resource type="Script" path="res://scripts/world/terrain_view.gd" id="3_terrain"]
+[ext_resource type="Script" path="res://scripts/world/building_view.gd" id="4_building"]
+[ext_resource type="Script" path="res://scripts/world/scrapling_swarm_view.gd" id="5_scraplings"]
+[ext_resource type="Script" path="res://scripts/world/machine_view.gd" id="6_machine"]
+[ext_resource type="Script" path="res://scripts/world/delivery_view.gd" id="7_delivery"]
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="8_hud"]
+[ext_resource type="Script" path="res://scripts/ui/resource_panel.gd" id="9_resources"]
+[ext_resource type="Script" path="res://scripts/ui/build_panel.gd" id="10_build"]
+[ext_resource type="Script" path="res://scripts/ui/workforce_panel.gd" id="11_workforce"]
+[ext_resource type="Script" path="res://scripts/ui/research_panel.gd" id="12_research"]
+[ext_resource type="Script" path="res://scripts/ui/machine_panel.gd" id="13_machine_panel"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_main")
+
+[node name="GameState" type="Node" parent="."]
+script = ExtResource("2_state")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="TerrainView" type="Node2D" parent="World"]
+script = ExtResource("3_terrain")
+
+[node name="BuildingView" type="Node2D" parent="World"]
+script = ExtResource("4_building")
+
+[node name="ScraplingSwarmView" type="Node2D" parent="World"]
+script = ExtResource("5_scraplings")
+
+[node name="MachineView" type="Node2D" parent="World"]
+script = ExtResource("6_machine")
+
+[node name="DeliveryView" type="Node2D" parent="World"]
+script = ExtResource("7_delivery")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="Hud" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("8_hud")
+
+[node name="TopPanel" type="PanelContainer" parent="UILayer/Hud"]
+layout_mode = 1
+anchors_preset = 0
+anchor_left = 0.25
+anchor_right = 0.75
+offset_top = 4.0
+offset_bottom = 45.0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Hud/TopPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 3
+
+[node name="ResourcePanel" type="VBoxContainer" parent="UILayer/Hud/TopPanel/Margin"]
+layout_mode = 2
+script = ExtResource("9_resources")
+
+[node name="Resources" type="Label" parent="UILayer/Hud/TopPanel/Margin/ResourcePanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "resources"
+horizontal_alignment = 1
+
+[node name="LeftPanel" type="PanelContainer" parent="UILayer/Hud"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 48.0
+offset_right = 176.0
+offset_bottom = 316.0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Hud/LeftPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="BuildPanel" type="VBoxContainer" parent="UILayer/Hud/LeftPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 3
+script = ExtResource("10_build")
+
+[node name="Title" type="Label" parent="UILayer/Hud/LeftPanel/Margin/BuildPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "build"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="UILayer/Hud/LeftPanel/Margin/BuildPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Buttons" type="VBoxContainer" parent="UILayer/Hud/LeftPanel/Margin/BuildPanel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="RightPanel" type="PanelContainer" parent="UILayer/Hud"]
+layout_mode = 1
+anchors_preset = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -176.0
+offset_top = 48.0
+offset_right = -4.0
+offset_bottom = 316.0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Hud/RightPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="RightColumn" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="WorkforcePanel" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+script = ExtResource("11_workforce")
+
+[node name="Title" type="Label" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "scraplings"
+horizontal_alignment = 1
+
+[node name="Summary" type="Label" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "population"
+
+[node name="TrainingLabel" type="Label" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "training"
+
+[node name="TrainingScroll" type="ScrollContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel"]
+custom_minimum_size = Vector2(0, 66)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Buttons" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn/WorkforcePanel/TrainingScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="ResearchPanel" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+script = ExtResource("12_research")
+
+[node name="Title" type="Label" parent="UILayer/Hud/RightPanel/Margin/RightColumn/ResearchPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "research"
+horizontal_alignment = 1
+
+[node name="ResearchScroll" type="ScrollContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn/ResearchPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Buttons" type="VBoxContainer" parent="UILayer/Hud/RightPanel/Margin/RightColumn/ResearchPanel/ResearchScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="BottomPanel" type="PanelContainer" parent="UILayer/Hud"]
+layout_mode = 1
+anchor_left = 0.25
+anchor_top = 1.0
+anchor_right = 0.75
+anchor_bottom = 1.0
+offset_top = -48.0
+offset_bottom = -4.0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Hud/BottomPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 4
+
+[node name="MachinePanel" type="VBoxContainer" parent="UILayer/Hud/BottomPanel/Margin"]
+layout_mode = 2
+script = ExtResource("13_machine_panel")
+
+[node name="Status" type="Label" parent="UILayer/Hud/BottomPanel/Margin/MachinePanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "machine"
+horizontal_alignment = 1
