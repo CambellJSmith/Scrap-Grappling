@@ -26,7 +26,7 @@ func _process(delta: float) -> void: # Consumes new delivery events and advances
 func _spawn_delivery(event: MachineDeliveryEvent) -> void: # Creates a deterministic profile-view throw from the settlement toward the machine.
     var start_height: float = float(event.sequence % 3)
     var target_height: float = float(event.sequence % 24)
-    var start: Vector2 = Vector2(410.0, SideViewLayout.GROUND_Y - 15.0 - start_height)
+    var start: Vector2 = Vector2(SideViewLayout.MACHINE_LEFT_X - 54.0, SideViewLayout.GROUND_Y - 15.0 - start_height)
     var end: Vector2 = Vector2(SideViewLayout.MACHINE_LEFT_X + 18.0 + float(event.sequence % 48), SideViewLayout.GROUND_Y - 28.0 - target_height)
     var speed: float = 0.9 + float(event.sequence % 5) * 0.07
     _deliveries.append(DeliveryVisual.new(event.resource_id, start, end, speed))

@@ -2,11 +2,11 @@ class_name ResearchPanel
 extends VBoxContainer
 
 var _game_state: GameState # Stores the simulation source modified by research actions.
-var _button_container: VBoxContainer # Stores editor-backed layout receiving research buttons.
+var _button_container: Container # Stores editor-backed layout receiving research buttons.
 var _buttons: Dictionary[StringName, ActionButton] = {} # Stores one research action per research definition.
 var _refresh_accumulator: float = 0.0 # Limits lock and affordability refresh frequency.
 
-func setup(game_state: GameState, button_container: VBoxContainer) -> void: # Supplies state and populates the editor-created research list.
+func setup(game_state: GameState, button_container: Container) -> void: # Supplies state and populates the editor-created research list.
     _game_state = game_state
     _button_container = button_container
     _create_buttons()
