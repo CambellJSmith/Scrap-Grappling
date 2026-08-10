@@ -54,9 +54,9 @@ func _sync_agents(force: bool) -> void: # Rebuilds only the cheap visual represe
             agent.job_id = desired_jobs[index]
             _assign_next_target(agent, index)
 
-func _assign_next_target(agent: ScraplingVisualAgent, index: int) -> void: # Assigns a new destination along the horizontal world axis only.
+func _assign_next_target(agent: ScraplingVisualAgent, index: int) -> void: # Assigns a destination at an active construction site or actual player-placed workplace.
     agent.target_visit += 1
-    agent.target_x = SideViewLayout.target_x_for(agent.job_id, index, agent.target_visit)
+    agent.target_x = ScraplingTargetResolver.target_x(_game_state, agent.job_id, index, agent.target_visit)
 
 func _create_job_signature() -> String: # Creates a compact workforce signature used to detect presentation changes.
     var parts: PackedStringArray = PackedStringArray()
